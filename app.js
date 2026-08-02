@@ -499,7 +499,7 @@ function renderizarSeccionFecha(posicion, campo, seccionKey, numero, nombrePila)
           </div>
         </div>
         <p class="numero-que-representa"><strong>¿Qué representa?</strong> ${estructura.queRepresenta || ''}</p>
-        <div class="interpretacion-texto"><p><em>La biblioteca para el número ${numero} todavía no está cargada en esta sección.</em></p></div>
+        <div class="interpretacion-texto"><p><em>Revisa que la información este completa ${numero}.</em></p></div>
       </div>
     `;
   }
