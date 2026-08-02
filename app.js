@@ -125,7 +125,7 @@ function mostrarCelebracion(nombrePila, genero) {
     document.getElementById('celebracion-texto').textContent =
       `${bienvenida} a la familia, ${nombrePila}. Aquí crecerás con todo el amor y cuidados.`;
     document.getElementById('celebracion-frase').textContent =
-      'Tu llegada es el comienzo de un nuevo viaje lleno de esperanzas, sueños y posibilidades.';
+      'Tu llegada es el comienzo de un nuevo viaje lleno de alegría, esperanza, sueños y posibilidades.';
 
     // GIF de celebración según género (colócalos en images/boy.gif e images/girl.gif).
     // Si el archivo no existe todavía, el <img> simplemente no se muestra (sin romper la pantalla).
