@@ -31,6 +31,16 @@ const SIGNO_EMOJI = {
   'Sagitario': '♐\uFE0E', 'Capricornio': '♑\uFE0E', 'Acuario': '♒\uFE0E', 'Piscis': '♓\uFE0E',
 };
 
+function obtenerAstrologiaSigno(signoSolar) {
+  return (window.BIBLIOTECA_ASTROLOGIA || {})[signoSolar] || null;
+}
+
+function circuloColorHex(hex) {
+  if (!hex) return '';
+  return `<span class="circulo-color-hex" style="--color-signo:${hex}" aria-hidden="true"></span>`;
+}
+
+
 // ---------------------------------------------------------------
 // ICONOS DE LÍNEA (reemplazan los emojis, en los colores de la marca)
 // ---------------------------------------------------------------
@@ -213,7 +223,7 @@ function manejarEnvioIniciar(evento) {
       }
     } catch (error) {
       console.error('Error al generar el Mapa Energético:', error);
-      alert('Ocurrió un error generando el reporte. Intentalo más tarde, si persiste envianos un correo para apoyarte');
+      alert('Ocurrió un error generando el Mapa de tu bebé. Intentalo más tarde, si persiste envianos un correo para solucionarlo');
     }
   }, 1200);
 
@@ -277,7 +287,7 @@ function obtenerTextoCronos(seccionKey, numero) {
   const contenido = libroNumero ? libroNumero[seccionKey] : null;
 
   if (!contenido || !contenido.textoBreveCronos) {
-    return 'Texto breve no disponible para esta energía.';
+    return 'Información no disponible para esta energía.';
   }
 
   return contenido.textoBreveCronos;
@@ -326,8 +336,8 @@ function generarVariacionesCronos(resultadoA, resultadoB) {
   if (!variaciones.length) {
     return `
       <div class="cronos-variaciones">
-        <p><strong>No hay variación en los cinco aspectos.</strong></p>
-        <p>Ambas fechas comparten la misma combinación numerológica; la diferencia entre ellas está únicamente en el signo solar, si este cambia.</p>
+        <p><strong>No hay variación en el Mapa de Fecha.</strong></p>
+        <p>Ambas fechas comparten la misma configuración energética</p>
       </div>
     `;
   }
@@ -562,9 +572,10 @@ function renderizarEsenciaEnergetica(numeroAlma, signoSolar) {
   const estructura = (window.ESTRUCTURA_FECHA || {}).esenciaEnergetica || {};
   const libroNumero = (window.BIBLIOTECA_FECHA || {})[numeroAlma];
   const contenido = libroNumero ? libroNumero.esenciaEnergetica : null;
+  const astrologia = obtenerAstrologiaSigno(signoSolar);
 
   if (!contenido) {
-    return `<div class="ficha-energetica"><h3>${estructura.titulo || 'Esencia Energética'}</h3><p><em>La biblioteca para el número ${numeroAlma} todavía no está cargada en esta sección.</em></p></div>`;
+    return `<div class="ficha-energetica"><h3>${estructura.titulo || 'Esencia Energética'}</h3><p><em>La biblioteca para el número ${numeroAlma} Información no disponible aún.</em></p></div>`;
   }
 
   const subsecciones = SUBSECCIONES_ESENCIA
@@ -585,26 +596,14 @@ function renderizarEsenciaEnergetica(numeroAlma, signoSolar) {
     </details>
   ` : '';
 
-  // Grid de 2 columnas, orden row-major para que quede:
-  // Col.1 = Elemento, Arquetipo, Signo Solar   |   Col.2 = Color, Símbolo, Verbo
   const fichaItems = [];
-  if (contenido.elemento) {
-    fichaItems.push(`<div class="ficha-item"><span>Elemento</span><b>${iconoPorNombre(ICONO_ELEMENTO, contenido.elemento.nombre)} ${contenido.elemento.nombre}</b><p>${contenido.elemento.descripcion}</p></div>`);
-  }
-  if (contenido.colorEnergetico) {
-    fichaItems.push(`<div class="ficha-item"><span>Color energético</span><b>${iconoPorNombre(ICONO_COLOR, contenido.colorEnergetico.nombre)} ${contenido.colorEnergetico.nombre}</b><p>${contenido.colorEnergetico.descripcion}</p></div>`);
-  }
-  if (contenido.arquetipo) {
-    fichaItems.push(`<div class="ficha-item"><span>Arquetipo</span><b>${contenido.arquetipo.nombre}</b><p>${contenido.arquetipo.descripcion}</p></div>`);
-  }
-  if (contenido.simbolo) {
-    fichaItems.push(`<div class="ficha-item"><span>Símbolo</span><b>${contenido.simbolo.nombre}</b><p>${contenido.simbolo.descripcion}</p></div>`);
-  }
-  if (signoSolar) {
-    fichaItems.push(`<div class="ficha-item"><span>Signo solar</span><b>${SIGNO_EMOJI[signoSolar] || ''} ${signoSolar}</b></div>`);
-  }
-  if (contenido.verbo) {
-    fichaItems.push(`<div class="ficha-item"><span>Verbo</span><b>${contenido.verbo}</b></div>`);
+  if (contenido.arquetipo) fichaItems.push(`<div class="ficha-item"><span>Arquetipo</span><b>${contenido.arquetipo.nombre}</b><p>${contenido.arquetipo.descripcion}</p></div>`);
+  if (contenido.simbolo) fichaItems.push(`<div class="ficha-item"><span>Símbolo</span><b>${contenido.simbolo.nombre}</b><p>${contenido.simbolo.descripcion}</p></div>`);
+  if (signoSolar) fichaItems.push(`<div class="ficha-item"><span>Signo solar</span><b>${SIGNO_EMOJI[signoSolar] || ''} ${signoSolar}</b></div>`);
+  if (contenido.verbo) fichaItems.push(`<div class="ficha-item"><span>Verbo</span><b>${contenido.verbo}</b></div>`);
+  if (astrologia) {
+    fichaItems.push(`<div class="ficha-item"><span>Elemento</span><b>${astrologia.elemento}</b></div>`);
+    fichaItems.push(`<div class="ficha-item"><span>Color energético</span><b class="ficha-color-linea">${circuloColorHex(astrologia.hex)} ${astrologia.color}</b></div>`);
   }
 
   return `
@@ -612,10 +611,7 @@ function renderizarEsenciaEnergetica(numeroAlma, signoSolar) {
       <h3>${estructura.titulo || 'Esencia Energética'} <span style="font-size:13px; font-weight:400; color:#6b6180;">${estructura.subtitulo || ''}</span></h3>
       <p class="numero-vibracion" style="margin-bottom:10px;">Vibración número ${numeroAlma}</p>
       ${parrafosHtml(contenido.laEsencia)}
-      <div class="subsecciones-grupo">
-        ${subsecciones}
-        ${lenguajeAmorHtml}
-      </div>
+      <div class="subsecciones-grupo">${subsecciones}${lenguajeAmorHtml}</div>
       <div class="ficha-energetica-grid">${fichaItems.join('')}</div>
       ${contenido.afirmacion ? `<div class="afirmacion-box">"${contenido.afirmacion}"</div>` : ''}
     </div>
@@ -650,7 +646,7 @@ function generarInterpretacionIA(seccion, numero, nombrePila, puntos, fraseIntro
   return `
     <div class="numero-frase-poder">${fraseIntro ? fraseIntro : `[Frase poderosa que la IA generará para la vibración ${numero} en ${seccion}]`}</div>
     <div class="interpretacion-texto">
-      <p>[Aquí se generará con IA la interpretación completa de este número para ${nombrePila || 'tu bebé'} en esta posición.]</p>
+      <p>Interpretación ${nombrePila || 'tu bebé'}.]</p>
       <ul>${listaPuntos}</ul>
       ${conAcompanarBox ? `<div class="acompanar-box"><strong>Los padres pueden ayudarle cuando...</strong> [generado por IA]</div>` : ''}
     </div>
@@ -671,16 +667,16 @@ function renderizarReporteFecha(datos) {
 
   document.getElementById('reporte-fecha-contenido').innerHTML = `
     <div class="reporte-bienvenida">
-      <div class="eyebrow">Tu Mapa Energético de Nacimiento</div>
-      <h1>Bienvenido(a) a este mundo, ${nombrePila}</h1>
-      <p class="subt">Una mirada a los talentos, regalos y propósito que acompañan tu llegada a esta vida.</p>
+      <div class="eyebrow">Mapa de Fecha de Nacimiento</div>
+      <h2>Lo que revela la fecha de, ${nombrePila}</h1>
+      <p>La fecha de nacimiento revela la energía con la que tu bebé llega a este mundo, es una mirada a los talentos, regalos y propósito que acompañan su llegada a esta vida.</p>
     </div>
 
     ${seccionesFecha}
 
     ${esenciaEnergeticaHtml}
 
-    <button class="boton-secundario" onclick="irAPantalla('reporte-nombre')">Ver el Reporte de Nombre</button>
+    <button class="boton-secundario" onclick="irAPantalla('reporte-nombre')">Ver el Mapa del Nombre de ${nombrePila}</button>
   `;
 }
 
@@ -707,23 +703,24 @@ function renderizarReporteNombre(datos) {
         </div>
         <p class="numero-que-representa"><strong>¿Qué representa?</strong> ${item.queRepresenta}</p>
         <div class="interpretacion-texto">
-          ${texto ? parrafosHtml(texto) : '<p><em>La biblioteca para este número todavía no está cargada.</em></p>'}
+          ${texto ? parrafosHtml(texto) : '<p><em>Información no disponible en este momento.</em></p>'}
         </div>
       </div>
     `;
   }).join('');
 
   document.getElementById('reporte-nombre-contenido').innerHTML = `
-    <div class="encabezado-seccion">
-      <div class="eyebrow">Reporte de Nombre</div>
+    <div class="reporte-bienvenida">
+      <div class="eyebrow">Mapa del Nombre</div>
       <h2>Lo que revela el nombre de ${nombrePila}</h2>
-      <p>Mientras la fecha de nacimiento revela la energía con la que tu bebé llega a este mundo, el nombre añade una vibración que influye en la manera en que esa esencia se expresa y se desarrolla a lo largo de la vida. El nombre representa la energía que elegimos para acompañar esa alma.</p>
+      <p>El nombre representa la energía que elegimos para acompañar el alma del bebé. Es una vibración que influye en la manera en que su esencia se expresa y se desarrolla a lo largo de la vida.</p>
     </div>
+
 
     ${seccionesNombre}
 
 
-<button class="boton-secundario" onclick="irAPantalla('reporte-fecha')">Ver el Mapa Energético de ${nombrePila}</button>  `;
+<button class="boton-secundario" onclick="irAPantalla('reporte-fecha')">Ver el Mapa de Fecha de ${nombrePila}</button>  `;
 }
 
 // ---------------------------------------------------------------
@@ -851,7 +848,7 @@ function construirSeccionFechaContinuaParaAlbum(posicion, seccionKey, numero) {
             <p class="numero-vibracion">Vibración número ${numero}</p>
           </div>
         </div>
-        <p><em>La biblioteca para el número ${numero} todavía no está cargada en esta sección.</em></p>
+        <p><em>Información no disponible en este momento ${numero}.</em></p>
       </div>
     `;
   }
@@ -896,6 +893,7 @@ function construirEsenciaContinuaParaAlbum(numeroAlma, signoSolar) {
   const estructura = (window.ESTRUCTURA_FECHA || {}).esenciaEnergetica || {};
   const libroNumero = (window.BIBLIOTECA_FECHA || {})[numeroAlma];
   const contenido = libroNumero ? libroNumero.esenciaEnergetica : null;
+  const astrologia = obtenerAstrologiaSigno(signoSolar);
 
   if (!contenido) return '';
 
@@ -911,13 +909,19 @@ function construirEsenciaContinuaParaAlbum(numeroAlma, signoSolar) {
     <div class="album-subseccion-continua">
       <h4>Su lenguaje de amor predominante</h4>
       ${parrafosHtml(contenido.lenguajeDeAmor.intro)}
-      <ul>
-        ${(contenido.lenguajeDeAmor.items || []).map(i =>
-          `<li><strong>${i.nombre}:</strong> ${i.descripcion}</li>`
-        ).join('')}
-      </ul>
+      <ul>${(contenido.lenguajeDeAmor.items || []).map(i => `<li><strong>${i.nombre}:</strong> ${i.descripcion}</li>`).join('')}</ul>
     </div>
   ` : '';
+
+  const fichaItems = [];
+  if (contenido.arquetipo) fichaItems.push(`<div class="ficha-item"><span>Arquetipo</span><b>${contenido.arquetipo.nombre}</b><p>${contenido.arquetipo.descripcion}</p></div>`);
+  if (contenido.simbolo) fichaItems.push(`<div class="ficha-item"><span>Símbolo</span><b>${contenido.simbolo.nombre}</b><p>${contenido.simbolo.descripcion}</p></div>`);
+  if (signoSolar) fichaItems.push(`<div class="ficha-item"><span>Signo solar</span><b>${SIGNO_EMOJI[signoSolar] || ''} ${signoSolar}</b></div>`);
+  if (contenido.verbo) fichaItems.push(`<div class="ficha-item"><span>Verbo</span><b>${contenido.verbo}</b></div>`);
+  if (astrologia) {
+    fichaItems.push(`<div class="ficha-item"><span>Elemento</span><b>${astrologia.elemento}</b></div>`);
+    fichaItems.push(`<div class="ficha-item"><span>Color energético</span><b class="ficha-color-linea">${circuloColorHex(astrologia.hex)} ${astrologia.color}</b></div>`);
+  }
 
   return `
     <div class="album-reporte-seccion ficha-energetica album-esencia-continua">
@@ -926,14 +930,7 @@ function construirEsenciaContinuaParaAlbum(numeroAlma, signoSolar) {
       ${parrafosHtml(contenido.laEsencia)}
       ${subsecciones}
       ${lenguajeAmor}
-      <div class="ficha-energetica-grid">
-        ${contenido.elemento ? `<div class="ficha-item"><span>Elemento</span><b>${iconoPorNombre(ICONO_ELEMENTO, contenido.elemento.nombre)} ${contenido.elemento.nombre}</b><p>${contenido.elemento.descripcion}</p></div>` : ''}
-        ${contenido.colorEnergetico ? `<div class="ficha-item"><span>Color energético</span><b>${iconoPorNombre(ICONO_COLOR, contenido.colorEnergetico.nombre)} ${contenido.colorEnergetico.nombre}</b><p>${contenido.colorEnergetico.descripcion}</p></div>` : ''}
-        ${contenido.arquetipo ? `<div class="ficha-item"><span>Arquetipo</span><b>${contenido.arquetipo.nombre}</b><p>${contenido.arquetipo.descripcion}</p></div>` : ''}
-        ${contenido.simbolo ? `<div class="ficha-item"><span>Símbolo</span><b>${contenido.simbolo.nombre}</b><p>${contenido.simbolo.descripcion}</p></div>` : ''}
-        ${signoSolar ? `<div class="ficha-item"><span>Signo solar</span><b>${SIGNO_EMOJI[signoSolar] || ''} ${signoSolar}</b></div>` : ''}
-        ${contenido.verbo ? `<div class="ficha-item"><span>Verbo</span><b>${contenido.verbo}</b></div>` : ''}
-      </div>
+      <div class="ficha-energetica-grid">${fichaItems.join('')}</div>
       ${contenido.afirmacion ? `<div class="afirmacion-box">"${contenido.afirmacion}"</div>` : ''}
     </div>
   `;
@@ -1068,7 +1065,7 @@ function construirHtmlAlbum(datos) {
     <!-- Mapa energético condensado -->
     <div class="album-pagina">
       <h2>Su Mapa Energético</h2>
-      <p class="album-parrafo-ia">[Aquí se generará con IA la esencia general de ${nombrePila}, combinando todos sus números.]</p>
+      <p class="album-parrafo-ia"</p>
       <div class="album-numeros-grid">
         ${filasNumerosFecha}
         ${filasNumerosNombre}
