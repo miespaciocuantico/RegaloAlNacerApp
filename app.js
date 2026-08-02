@@ -164,6 +164,7 @@ function manejarEnvioIniciar(evento) {
   const yaNacio = document.getElementById('iniciar-ya-nacio').checked;
   const genero = document.getElementById('iniciar-genero').value;
   const hora = document.getElementById('iniciar-hora').value;
+  const lugarNacimiento = document.getElementById('iniciar-lugar-nacimiento').value.trim();
   const peso = document.getElementById('iniciar-peso').value.trim();
   const talla = document.getElementById('iniciar-talla').value.trim();
   const mensajePapas = document.getElementById('iniciar-mensaje-papas').value.trim();
@@ -192,6 +193,7 @@ function manejarEnvioIniciar(evento) {
         yaNacio,
         genero: yaNacio ? genero : null,
         hora: yaNacio ? hora : '',
+        lugarNacimiento: yaNacio ? lugarNacimiento : '',
         peso: yaNacio ? peso : '',
         talla: yaNacio ? talla : '',
         mensajePapas: yaNacio ? mensajePapas : '',
@@ -1005,7 +1007,7 @@ function construirReporteNombreParaAlbum(datos) {
 }
 
 function construirHtmlAlbum(datos) {
-  const { nombrePila, fecha, nombreNumerologia, signoSolar, hora, peso, talla, mensajePapas, fechaNacimiento } = datos;
+  const { nombrePila, fecha, nombreNumerologia, signoSolar, hora, lugarNacimiento, peso, talla, mensajePapas, fechaNacimiento } = datos;
   const esNino = datos.genero === 'masculino';
   const generoTexto = esNino ? 'niño' : 'niña';
   const articuloGenero = esNino ? 'Un' : 'Una';
@@ -1056,6 +1058,7 @@ function construirHtmlAlbum(datos) {
         <div><span>Nombre completo</span><b>${datos.nombreCompleto}</b></div>
         <div><span>Fecha de nacimiento</span><b>${formatearFecha(fechaNacimiento)}</b></div>
         <div><span>Hora de nacimiento</span><b>${hora || '—'}</b></div>
+        <div><span>Lugar de nacimiento</span><b>${lugarNacimiento || '—'}</b></div>
         <div><span>Peso al nacer</span><b>${formatearConUnidad(peso, 'kg')}</b></div>
         <div><span>Tamaño al nacer</span><b>${formatearConUnidad(talla, 'cm')}</b></div>
         <div><span>Signo solar</span><b>${SIGNO_EMOJI[signoSolar] || ''} ${signoSolar}</b></div>
