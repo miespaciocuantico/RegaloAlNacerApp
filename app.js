@@ -1039,7 +1039,14 @@ function construirHtmlAlbum(datos) {
       <div class="eyebrow">Álbum de</div>
       <h1>${nombrePila}</h1>
       <p class="subt">${articuloGenero} ${generoTexto} que llegó a iluminar nuestras vidas</p>
+      <img
+       src="images/logo-bebe.webp"
+      alt="Logo de Un Regalo al Nacer"
+      class="album-logo-portada"
+      >
     </div>
+
+    
     <div class="album-pagina album-carta-bebe album-hoja-2">
       <p>Querid${esNino ? 'o' : 'a'} ${nombrePila}:</p>
       ${mensajePapas

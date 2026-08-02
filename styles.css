@@ -683,6 +683,16 @@ input, select, textarea { font-size: 16px; }
   --gradiente-album: linear-gradient(135deg, var(--azul-pastel), var(--lavanda));
 }
 
+.album-logo-portada {
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  display: block;
+  margin: 34px auto 0;
+  border-radius: 50%;
+  filter: drop-shadow(0 12px 28px rgba(91, 75, 120, 0.20));
+}
+
 .album-pagina {
   background: #fff;
   border: 1px solid #E9DFC9;
@@ -853,6 +863,13 @@ input, select, textarea { font-size: 16px; }
     page-break-before: always;
     break-before: page;
   }
+  .album-hoja-1 .album-logo-portada {
+  width: 280px;
+  height: 280px;
+  margin-top: 36px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
 
   .album-portadilla-reporte {
     min-height: 9.5in;
@@ -1005,7 +1022,8 @@ input, select, textarea { font-size: 16px; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 1.05in;
     text-align: center;
     background: var(--gradiente-album, var(--gradiente-pastel)) !important;
     -webkit-print-color-adjust: exact;
