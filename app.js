@@ -395,6 +395,14 @@ function elegirFrasePersistente(seccionKey, frases) {
   return datosBebe.frasesElegidas[seccionKey];
 }
 
+const TITULOS_SECCIONES_FECHA = {
+  alma: 'ALMA',
+  personalidad: 'PERSONALIDAD',
+  regalo: 'REGALO',
+  caminoDeCrecimiento: 'CAMINO DE CRECIMIENTO',
+  misionNatal: 'MISIÓN NATAL',
+};
+
 // Renderiza una de las 5 secciones del reporte de fecha a partir de la biblioteca.
 function renderizarSeccionFecha(posicion, campo, seccionKey, numero, nombrePila) {
   const estructura = (window.ESTRUCTURA_FECHA || {})[seccionKey] || {};
@@ -407,7 +415,7 @@ function renderizarSeccionFecha(posicion, campo, seccionKey, numero, nombrePila)
         <div class="numero-cabecera">
           <div class="numero-estrella">${numero}</div>
           <div>
-            <h3 class="numero-titulo">${posicion}. ${estructura.titulo || seccionKey}</h3>
+            <h3 class="numero-titulo">${posicion}. ${estructura.titulo || TITULOS_SECCIONES_FECHA[seccionKey] || seccionKey}</h3>
             <p class="numero-vibracion">Vibración número ${numero}</p>
           </div>
         </div>
@@ -431,7 +439,7 @@ function renderizarSeccionFecha(posicion, campo, seccionKey, numero, nombrePila)
       <div class="numero-cabecera">
         <div class="numero-estrella">${numero}</div>
         <div>
-          <h3 class="numero-titulo">${posicion}. ${estructura.titulo || seccionKey}</h3>
+          <h3 class="numero-titulo">${posicion}. ${estructura.titulo || TITULOS_SECCIONES_FECHA[seccionKey] || seccionKey}</h3>
           <p class="numero-vibracion">Vibración número ${numero}</p>
         </div>
       </div>
@@ -760,7 +768,7 @@ function construirSeccionFechaContinuaParaAlbum(posicion, seccionKey, numero) {
         <div class="numero-cabecera">
           <div class="numero-estrella">${numero}</div>
           <div>
-            <h3 class="numero-titulo">${posicion}. ${estructura.titulo || seccionKey}</h3>
+            <h3 class="numero-titulo">${posicion}. ${estructura.titulo || TITULOS_SECCIONES_FECHA[seccionKey] || seccionKey}</h3>
             <p class="numero-vibracion">Vibración número ${numero}</p>
           </div>
         </div>
@@ -783,7 +791,7 @@ function construirSeccionFechaContinuaParaAlbum(posicion, seccionKey, numero) {
       <div class="numero-cabecera">
         <div class="numero-estrella">${numero}</div>
         <div>
-          <h3 class="numero-titulo">${posicion}. ${estructura.titulo || seccionKey}</h3>
+          <h3 class="numero-titulo">${posicion}. ${estructura.titulo || TITULOS_SECCIONES_FECHA[seccionKey] || seccionKey}</h3>
           <p class="numero-vibracion">Vibración número ${numero}</p>
         </div>
       </div>
