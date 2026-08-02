@@ -211,7 +211,7 @@ function manejarEnvioIniciar(evento) {
       }
     } catch (error) {
       console.error('Error al generar el Mapa Energético:', error);
-      alert('Ocurrió un error generando el reporte. Revisa la consola (F12) para más detalle.');
+      alert('Ocurrió un error generando el reporte. Intentalo más tarde, si persiste envianos un correo para apoyarte');
     }
   }, 1200);
 
@@ -269,14 +269,91 @@ function renderizarCronos({ resultadoA, resultadoB }) {
   `;
 }
 
-// STUB — reemplazar con llamada real a IA para comparar ambas energías.
+function obtenerTextoCronos(seccionKey, numero) {
+  const biblioteca = window.BIBLIOTECA_FECHA || {};
+  const libroNumero = biblioteca[numero];
+  const contenido = libroNumero ? libroNumero[seccionKey] : null;
+
+  if (!contenido || !contenido.textoBreveCronos) {
+    return 'Texto breve no disponible para esta energía.';
+  }
+
+  return contenido.textoBreveCronos;
+}
+
+function generarBloqueOpcionCronos(resultado, etiqueta) {
+  const aspectos = [
+    { label: 'Alma', campo: 'alma', seccion: 'alma' },
+    { label: 'Personalidad', campo: 'personalidad', seccion: 'personalidad' },
+    { label: 'Regalo', campo: 'regalo', seccion: 'regalo' },
+    { label: 'Camino de Crecimiento', campo: 'retos', seccion: 'caminoDeCrecimiento' },
+    { label: 'Misión', campo: 'mision', seccion: 'misionNatal' },
+  ];
+
+  return `
+    <div class="cronos-opcion-detalle">
+      <h4>Opción ${etiqueta}</h4>
+      ${aspectos.map(aspecto => {
+        const numero = resultado.fecha[aspecto.campo];
+        const texto = obtenerTextoCronos(aspecto.seccion, numero);
+
+        return `
+          <div class="cronos-aspecto">
+            <p><strong>${aspecto.label} ${numero}</strong></p>
+            <p>${texto}</p>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function generarVariacionesCronos(resultadoA, resultadoB) {
+  const aspectos = [
+    { label: 'Alma', campo: 'alma' },
+    { label: 'Personalidad', campo: 'personalidad' },
+    { label: 'Regalo', campo: 'regalo' },
+    { label: 'Camino de Crecimiento', campo: 'retos' },
+    { label: 'Misión', campo: 'mision' },
+  ];
+
+  const variaciones = aspectos.filter(aspecto =>
+    resultadoA.fecha[aspecto.campo] !== resultadoB.fecha[aspecto.campo]
+  );
+
+  if (!variaciones.length) {
+    return `
+      <div class="cronos-variaciones">
+        <p><strong>No hay variación en los cinco aspectos.</strong></p>
+        <p>Ambas fechas comparten la misma combinación numerológica; la diferencia entre ellas está únicamente en el signo solar, si este cambia.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="cronos-variaciones">
+      <p><strong>La variación está en:</strong></p>
+      <ul>
+        ${variaciones.map(aspecto => `
+          <li>
+            <strong>${aspecto.label}:</strong>
+            ${resultadoA.fecha[aspecto.campo]} en la opción A
+            y ${resultadoB.fecha[aspecto.campo]} en la opción B.
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `;
+}
+
 function generarVeredictoCronos(resultadoA, resultadoB) {
   return `
     <h3 style="color:var(--dorado); font-family:'Fraunces',serif; font-size:17px; margin-bottom:10px;">¿Cuál energía elegir?</h3>
-    <p style="margin-bottom:14px;">Con la que ustedes como papás se sientan más identificados:</p>
-    <p><strong>La opción A</strong> — [Aquí se generará con IA un párrafo cálido describiendo la energía general que trae esta fecha para tu bebé, sin repetir los números.]</p>
-    <p><strong>La opción B</strong> — [Aquí se generará con IA un párrafo cálido describiendo la energía general que trae esta fecha para tu bebé, sin repetir los números.]</p>
-    <p>[Aquí se generará con IA un cierre comparando ambos caminos en un par de párrafos, para ayudarles a decidir con qué energía se sienten más identificados.]</p>
+    <p style="margin-bottom:18px;">Con la que ustedes como papás se sientan más identificados:</p>
+
+    ${generarBloqueOpcionCronos(resultadoA, 'A')}
+    ${generarBloqueOpcionCronos(resultadoB, 'B')}
+    ${generarVariacionesCronos(resultadoA, resultadoB)}
   `;
 }
 
