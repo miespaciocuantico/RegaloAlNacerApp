@@ -1,0 +1,1171 @@
+/* =========================================================
+   REGALO AL NACER — Sistema visual "Mapa Estelar" (paleta pastel)
+   Inspirado en los tonos del logo: lavanda, rosa, dorado y azul cielo
+   en degradado suave, sobre fondo crema cálido.
+   Tipografía:
+     Display: 'Fraunces' (serif con carácter, óptica cálida)
+     Cuerpo:  'Work Sans' (sans limpia, legible en móvil)
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --crema: #FAF3E9;
+  --tinta: #3A3251;              /* texto de cuerpo, ciruela oscuro suave */
+  --medianoche: #5B4B78;         /* ciruela profundo: reemplaza el azul marino en títulos y superficies oscuras */
+  --dorado: #C9A24B;
+  --dorado-oscuro: #A97F2E;      /* para texto sobre fondos claros/pastel, mejor contraste */
+  --rosa: #D98B94;
+  --lino: #F1E8D8;
+  --lavanda: #DECBEF;
+  --rosa-pastel: #F8D8E0;
+  --dorado-pastel: #F6E6BE;
+  --azul-pastel: #C9E1EE;
+  --azul: #6E97BE;
+  --azul-oscuro: #4A7196;
+  --violeta: #A98FD1;
+  --violeta-oscuro: #7C5FAE;
+  --gradiente-pastel: linear-gradient(135deg, var(--azul-pastel) 0%, var(--lavanda) 38%, var(--rosa-pastel) 68%, var(--dorado-pastel) 100%);
+  --sombra: rgba(91, 75, 120, 0.14);
+  --nav-h: 74px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--crema);
+  color: var(--tinta);
+  font-family: 'Work Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  padding-bottom: var(--nav-h);
+  position: relative;
+}
+
+h1, h2, h3, .display {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
+
+p { line-height: 1.6; margin: 0 0 1em; }
+
+.oculto { display: none !important; }
+
+.pantalla {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 24px 40px;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* ---------- HOME / BIENVENIDA (hero con degradado pastel) ---------- */
+.hero-home {
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  border-radius: 0 0 32px 32px;
+  padding: 48px 24px 40px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.hero-home .eyebrow {
+  font-family: 'Work Sans', sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dorado-oscuro);
+  margin-bottom: 14px;
+}
+.hero-home h1 {
+  font-size: 30px;
+  font-style: italic;
+  color: var(--medianoche);
+}
+
+.imagen-hero {
+  width: 168px;
+  height: 168px;
+  display: block;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 24px rgba(201, 162, 75, 0.3));
+}
+
+.home-cuerpo { padding: 28px 4px 8px; }
+.home-cuerpo p { font-size: 16px; }
+.home-cuerpo .firma-linea {
+  border: none;
+  border-top: 1px solid var(--dorado);
+  width: 48px;
+  margin: 24px 0;
+  opacity: 0.6;
+}
+
+.boton-primario {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  background: var(--dorado);
+  color: #fff;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.boton-primario:hover { transform: translateY(-1px); box-shadow: 0 8px 20px var(--sombra); }
+.boton-primario:active { transform: translateY(0); }
+
+.boton-secundario {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  color: var(--medianoche);
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1.5px solid var(--medianoche);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* ---------- INICIAR / CRONOS (formularios) ---------- */
+.encabezado-seccion { text-align: center; margin-bottom: 28px; }
+.encabezado-seccion .eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--azul-oscuro);
+  font-weight: 600;
+}
+.encabezado-seccion h2 { font-size: 26px; color: var(--medianoche); }
+.encabezado-seccion p { color: #6b6180; font-size: 15px; }
+
+.campo { margin-bottom: 18px; }
+.campo label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--medianoche);
+}
+.campo input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #E3D8C2;
+  background: #fff;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 15px;
+  color: var(--tinta);
+}
+.campo input:focus {
+  outline: none;
+  border-color: var(--dorado);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.2);
+}
+.campo-fila { display: flex; gap: 12px; }
+.campo-fila .campo { flex: 1; }
+
+.nota-cronos {
+  background: var(--lino);
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 14px;
+  color: var(--medianoche);
+  margin-bottom: 20px;
+}
+
+/* ---------- CARGANDO / CELEBRACIÓN ---------- */
+.pantalla-cargando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-h));
+  text-align: center;
+  padding: 40px;
+}
+.estrella-girando {
+  width: 64px; height: 64px;
+  margin-bottom: 20px;
+  animation: girar 3s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+.pantalla-cargando p { color: var(--medianoche); font-style: italic; }
+
+.celebracion-destello {
+  width: 72px; height: 72px;
+  color: var(--dorado);
+  margin-bottom: 20px;
+  animation: destellar 2.2s ease-in-out infinite;
+}
+.celebracion-destello svg { width: 100%; height: 100%; }
+@keyframes destellar {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+.celebracion-titulo { font-size: 28px; color: var(--medianoche); margin-bottom: 10px; }
+.celebracion-texto { font-size: 16px; color: var(--medianoche); max-width: 360px; margin-bottom: 14px; font-weight: 500; }
+.celebracion-frase {
+  font-family: 'Fraunces', serif; font-style: italic; font-size: 16px;
+  color: #5c4f78; max-width: 320px; margin-bottom: 22px;
+}
+.celebracion-gif {
+  width: 280px; height: 280px; object-fit: contain;
+  margin-bottom: 22px;
+}
+.celebracion-boton { width: auto; padding-left: 32px; padding-right: 32px; }
+
+#pantalla-celebracion.tema-nino { background: linear-gradient(180deg, var(--azul-pastel), var(--crema) 70%); }
+#pantalla-celebracion.tema-nina { background: linear-gradient(180deg, var(--rosa-pastel), var(--crema) 70%); }
+
+/* ---------- REPORTE ---------- */
+.reporte-bienvenida {
+  text-align: center;
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  border-radius: 20px;
+  padding: 32px 22px;
+  margin-bottom: 28px;
+}
+.reporte-bienvenida .eyebrow { color: var(--dorado-oscuro); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 10px; font-weight: 700;}
+.reporte-bienvenida h1 { font-size: 26px; font-style: italic; color: var(--medianoche); }
+.reporte-bienvenida .subt { color: #6b5c8a; font-size: 14px; }
+
+.esencia-card {
+  background: var(--lino);
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 28px;
+}
+.esencia-card h3 { font-size: 18px; color: var(--medianoche); }
+.esencia-card p { font-size: 15px; color: #4A4368; margin-bottom: 0; }
+
+.seccion-numero {
+  border-top: 1px solid #E9DFC9;
+  padding: 26px 0;
+}
+.seccion-numero:first-of-type { border-top: none; }
+
+.numero-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.numero-estrella {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.numero-titulo { font-size: 19px; margin: 0; color: var(--medianoche); text-transform: uppercase; letter-spacing: 0.02em; }
+.numero-vibracion { font-size: 13px; color: var(--azul-oscuro); font-weight: 600; margin: 0; }
+
+.numero-que-representa { font-size: 14px; color: #6b6180; margin-bottom: 14px; }
+
+.numero-frase-poder {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--medianoche);
+  border-left: 3px solid var(--dorado);
+  padding-left: 14px;
+  margin: 14px 0;
+}
+
+.interpretacion-texto { font-size: 15px; color: var(--tinta); }
+.interpretacion-texto ul { margin: 10px 0; padding-left: 20px; }
+.interpretacion-texto li { margin-bottom: 6px; }
+
+.acompanar-box {
+  background: #fff;
+  border: 1px dashed var(--violeta);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.acompanar-box strong { color: var(--violeta-oscuro); }
+
+/* ---------------------------------------------------------------
+   BIBLIOTECA DE CONTENIDO — subsecciones expandibles, frase fija,
+   y ficha de Esencia Energética
+   --------------------------------------------------------------- */
+.interpretacion-texto p { margin-bottom: 12px; }
+.interpretacion-texto p:last-child { margin-bottom: 0; }
+
+.frase-destacada-fija {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--medianoche);
+  margin-bottom: 12px;
+}
+
+.subseccion-detalle {
+  border-top: 1px solid #EFE7D4;
+  padding: 10px 0;
+}
+.subseccion-detalle:first-of-type { border-top: none; }
+.subseccion-detalle summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--violeta-oscuro);
+  font-size: 14.5px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+.subseccion-detalle summary::-webkit-details-marker { display: none; }
+.subseccion-detalle summary::after {
+  content: '+';
+  font-size: 18px;
+  color: var(--dorado-oscuro);
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+.subseccion-detalle[open] summary::after { content: '–'; }
+.subseccion-detalle-cuerpo { font-size: 14.5px; color: var(--tinta); padding-top: 8px; }
+.subseccion-detalle-cuerpo p { margin-bottom: 10px; }
+.subseccion-detalle-cuerpo ul { margin: 6px 0; padding-left: 20px; }
+.subseccion-detalle-cuerpo li { margin-bottom: 6px; }
+
+.subsecciones-grupo { margin: 16px 0; }
+
+.ficha-energetica {
+  background: var(--lino);
+  border-radius: 18px;
+  padding: 22px;
+  margin-top: 10px;
+}
+.ficha-energetica h3 { font-size: 18px; color: var(--medianoche); margin-bottom: 4px; }
+.ficha-energetica-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+.ficha-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.ficha-item span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dorado-oscuro); font-weight: 700; margin-bottom: 3px; }
+.ficha-item b { font-size: 14.5px; color: var(--medianoche); display: block; margin-bottom: 2px; }
+.ficha-item p { font-size: 12.5px; color: #6b6180; margin: 0; }
+
+.afirmacion-box {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--medianoche);
+  text-align: center;
+  border: 1px dashed var(--dorado);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.compatibilidad-card {
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  border-radius: 18px;
+  padding: 24px 22px;
+  margin: 30px 0;
+}
+.compatibilidad-card h3 { color: var(--dorado-oscuro); font-size: 18px; }
+.compatibilidad-card p { color: #5c4f78; font-size: 14px; }
+
+/* ---------- RESUMEN ---------- */
+.resumen-titulo { text-align: center; margin-bottom: 24px; }
+.resumen-titulo .eyebrow { color: var(--azul-oscuro); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+.resumen-titulo h2 { font-size: 24px; color: var(--medianoche); }
+
+.resumen-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--lino);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.resumen-item .texto strong { display: block; font-size: 13px; color: var(--medianoche); margin-bottom: 3px; }
+.resumen-item .texto span { font-size: 14px; color: #4A4368; }
+
+.carta-final {
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  border-radius: 20px;
+  padding: 28px 24px;
+  margin-top: 28px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.carta-final .firma { text-align: right; margin-top: 18px; font-style: normal; font-size: 14px; color: var(--dorado-oscuro); }
+
+.nota-suave {
+  text-align: center;
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--azul-oscuro);
+  margin-top: -8px;
+  margin-bottom: 18px;
+}
+
+/* ---------- CRONOS: comparación de 2 fechas ---------- */
+.resultado-cronos-espaciado { margin-top: 28px; }
+
+.comparacion-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.columna-fecha {
+  background: var(--lino);
+  border-radius: 16px;
+  padding: 16px;
+}
+.columna-fecha h4 { font-size: 14px; text-align: center; color: var(--medianoche); margin-bottom: 8px; }
+.columna-fecha .fecha-grande {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+.columna-fecha .signo-linea { text-align: center; font-size: 15px; margin: 8px 0 4px; color: var(--medianoche); }
+.columna-fecha .mini-numero { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #E9DFC9; }
+.columna-fecha .mini-numero:last-child { border-bottom: none; }
+.columna-fecha .mini-numero b { color: var(--azul-oscuro); }
+
+.signo-emoji { font-size: 18px; margin-right: 4px; }
+
+.veredicto-cronos {
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+.veredicto-cronos h3 { color: var(--dorado-oscuro) !important; }
+
+/* ---------- Estado vacío ---------- */
+.estado-vacio { text-align: center; padding: 60px 24px; }
+.estado-vacio p { color: #6b6180; }
+
+/* ---------- NAV INFERIOR: botones cuadrados con chip de color ---------- */
+.nav-inferior {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: #fff;
+  display: flex;
+  z-index: 10;
+  box-shadow: 0 -4px 16px rgba(91, 75, 120, 0.12);
+  border-top: 1px solid #F0E7D6;
+  padding: 8px 8px;
+  gap: 6px;
+}
+.nav-boton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-icono {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--lino);
+  color: var(--medianoche);
+  opacity: 0.65;
+  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+}
+.nav-boton:active .nav-icono { transform: scale(0.94); }
+.nav-boton.activo .nav-icono {
+  background: var(--dorado);
+  color: #fff;
+  opacity: 1;
+  box-shadow: 0 6px 14px rgba(201, 162, 75, 0.35);
+}
+
+@media (min-width: 600px) {
+  .pantalla { padding-top: 40px; }
+}
+
+/* ---------- AJUSTES PARA MÓVILES PEQUEÑOS (< 380px de ancho) ---------- */
+@media (max-width: 380px) {
+  .pantalla { padding: 24px 16px 32px; }
+  .hero-home { padding: 36px 16px 32px; border-radius: 0 0 24px 24px; }
+  .hero-home h1 { font-size: 25px; }
+  .imagen-hero { width: 128px; height: 128px; }
+  .home-cuerpo p { font-size: 15px; }
+
+  .encabezado-seccion h2 { font-size: 22px; }
+
+  .campo-fila { gap: 8px; }
+  .campo input { padding: 12px 14px; font-size: 14px; }
+
+  .comparacion-columnas { gap: 8px; }
+  .columna-fecha { padding: 12px 10px; }
+  .columna-fecha .fecha-grande { font-size: 15px; }
+  .columna-fecha .mini-numero { font-size: 12px; }
+
+  .numero-estrella { width: 44px; height: 44px; font-size: 17px; }
+  .numero-titulo { font-size: 17px; }
+  .numero-frase-poder { font-size: 15.5px; }
+
+  .nav-icono { width: 40px; height: 40px; }
+
+  .reporte-bienvenida h1 { font-size: 22px; }
+  .resumen-item { padding: 12px 14px; }
+}
+
+/* Evita el zoom automático de iOS en inputs */
+input, select, textarea { font-size: 16px; }
+
+/* =========================================================
+   HOME: menú explicado
+   ========================================================= */
+.hero-home-compacto { padding: 32px 24px 28px; border-radius: 0 0 24px 24px; }
+.hero-home-compacto h1 { font-size: 24px; }
+
+.menu-home { padding: 20px 4px 8px; display: flex; flex-direction: column; gap: 14px; }
+
+.menu-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--lino);
+  border-radius: 16px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.menu-item:hover { transform: translateY(-1px); box-shadow: 0 6px 16px var(--sombra); }
+.menu-item:active { transform: translateY(0); }
+
+.menu-item-icono {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--gradiente-pastel);
+  color: var(--medianoche);
+  flex-shrink: 0;
+}
+.menu-item-icono svg { width: 24px; height: 24px; }
+.menu-item-texto h3 { font-size: 16px; margin-bottom: 4px; color: var(--medianoche); }
+.menu-item-texto p { font-size: 13.5px; color: #6b6180; margin: 0; }
+
+/* ---------- Checkbox "Ya nació" y campos condicionales ---------- */
+.campo-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--medianoche);
+  cursor: pointer;
+}
+.campo-checkbox input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--dorado); }
+
+.campos-condicionales {
+  background: var(--lino);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 6px 0 18px;
+}
+
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #E3D8C2;
+  background: #fff;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 15px;
+  color: var(--tinta);
+  resize: vertical;
+}
+.campo select:focus, .campo textarea:focus {
+  outline: none;
+  border-color: var(--dorado);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.2);
+}
+
+/* ---------- Mensajes de error de formulario ---------- */
+.mensaje-error {
+  background: #FBEAEA;
+  border: 1px solid #E3A9A9;
+  color: #A33B3B;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+/* =========================================================
+   ICONOS DE LÍNEA (reemplazan emojis)
+   ========================================================= */
+.nav-icono, .menu-item-icono, .resumen-item .icono, .icono-boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-icono svg { width: 24px; height: 24px; }
+.resumen-item .icono {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--dorado-pastel);
+  color: var(--dorado-oscuro);
+  flex-shrink: 0;
+}
+.resumen-item .icono svg { width: 20px; height: 20px; }
+.resumen-item .icono.icono-rosa { background: var(--rosa-pastel); color: #B5586A; }
+.icono-boton { display: inline-flex; vertical-align: middle; margin-right: 6px; }
+.icono-boton svg { width: 18px; height: 18px; }
+.boton-con-icono { display: inline-flex; align-items: center; justify-content: center; }
+
+/* =========================================================
+   TEXTO DE BIENVENIDA
+   ========================================================= */
+.saludo-bienvenida { font-family: 'Fraunces', serif; font-style: italic; font-size: 19px; color: var(--medianoche); }
+.cierre-bienvenida { font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--dorado-oscuro); text-align: center; }
+
+/* =========================================================
+   ÁLBUM DEL BEBÉ
+   ========================================================= */
+.boton-imprimir { margin-top: 8px; }
+
+.album-desbloqueado {
+  --acento-album: var(--rosa);
+  --acento-album-suave: var(--rosa-pastel);
+  --gradiente-album: linear-gradient(135deg, var(--lavanda), var(--rosa-pastel));
+}
+.album-desbloqueado.tema-nino {
+  --acento-album: #6E97BE;
+  --acento-album-suave: var(--azul-pastel);
+  --gradiente-album: linear-gradient(135deg, var(--azul-pastel), var(--lavanda));
+}
+
+.album-pagina {
+  background: #fff;
+  border: 1px solid #E9DFC9;
+  border-radius: 18px;
+  padding: 26px 22px;
+  margin-bottom: 22px;
+}
+.album-pagina h2 {
+  font-size: 19px;
+  color: var(--medianoche);
+  border-bottom: 2px solid var(--acento-album, var(--rosa));
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.album-portada {
+  text-align: center;
+  background: var(--gradiente-album, var(--gradiente-pastel));
+  color: var(--medianoche);
+  padding: 48px 24px;
+}
+.album-portada .eyebrow { color: var(--dorado-oscuro); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; }
+.album-portada h1 { font-family: 'Fraunces', serif; font-style: italic; font-size: 30px; color: var(--medianoche); margin: 6px 0; }
+.album-portada .subt { color: #5c4f78; font-size: 14px; }
+
+.album-datos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.album-datos-grid div { display: flex; flex-direction: column; gap: 2px; }
+.album-datos-grid span { font-size: 12px; color: #8b8398; text-transform: uppercase; letter-spacing: 0.03em; }
+.album-datos-grid b { font-size: 15px; color: var(--medianoche); }
+
+.album-mensaje-papas { margin-top: 18px; background: var(--acento-album-suave); border-radius: 12px; padding: 16px; }
+.album-mensaje-papas h3 { font-size: 14px; margin-bottom: 6px; color: var(--medianoche); }
+.album-mensaje-papas p { font-style: italic; margin: 0; }
+
+.album-carta-bebe {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--medianoche);
+  background: var(--acento-album-suave);
+}
+.album-carta-bebe p:first-child { font-weight: 600; font-style: normal; }
+
+.album-carta-final {
+  text-align: center;
+  background: var(--gradiente-album, var(--gradiente-pastel));
+}
+.album-carta-final h2 { border-bottom: none; }
+.album-carta-final p {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--medianoche);
+}
+
+.album-parrafo-ia { font-size: 14px; color: #6b6180; margin-bottom: 16px; }
+
+.album-numeros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.album-mini-numero {
+  display: flex;
+  justify-content: space-between;
+  background: var(--acento-album-suave);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+}
+.album-mini-numero b { color: var(--medianoche); }
+
+.album-huellas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.album-huella-caja {
+  aspect-ratio: 1;
+  border: 2px dashed var(--acento-album);
+  border-radius: 14px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+  background: var(--acento-album-suave);
+}
+.album-huella-caja span { font-size: 12px; color: #6b6180; text-align: center; }
+
+.album-linea-llenar { margin-bottom: 18px; }
+.album-linea-llenar span { display: block; font-size: 13px; font-weight: 600; color: var(--medianoche); margin-bottom: 6px; }
+.album-linea-llenar span em { font-weight: 400; font-style: italic; color: #8b8398; font-size: 12px; }
+.album-renglon { border-bottom: 1px solid #C9BFAE; height: 22px; margin-bottom: 6px; }
+.album-renglon-corto { border-bottom: 1px solid #C9BFAE; height: 22px; width: 60%; margin-bottom: 6px; }
+
+.album-fotos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.album-foto-caja { aspect-ratio: 4/3; border: 2px dashed var(--acento-album); border-radius: 12px; background: var(--acento-album-suave); }
+
+.album-tabla-bitacora { width: 100%; border-collapse: collapse; font-size: 13px; }
+.album-tabla-bitacora th { background: var(--acento-album-suave); color: var(--medianoche); padding: 8px 6px; text-align: left; }
+.album-tabla-bitacora td { border-bottom: 1px solid #E9DFC9; padding: 10px 6px; }
+.album-tabla-bitacora .celda-llenar { min-width: 40px; }
+
+/* ---------- Estilos de impresión ---------- */
+@page { margin: 0.4in; }
+@media print {
+  .nav-inferior, .boton-imprimir { display: none !important; }
+  body { padding-bottom: 0; background: #fff; }
+  .pantalla { max-width: 100%; padding: 0; }
+  .album-pagina { break-inside: avoid; border: none; box-shadow: none; page-break-after: always; }
+  .album-portada, .album-mini-numero, .album-huella-caja, .album-foto-caja, .album-tabla-bitacora th, .album-mensaje-papas {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}
+
+
+/* =========================================================
+   REPORTES COMPLETOS DENTRO DEL ÁLBUM
+   ========================================================= */
+.album-reporte-completo {
+  background: #fff;
+  border: 1px solid #E9DFC9;
+  border-radius: 18px;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+
+.album-portadilla-reporte {
+  text-align: center;
+  background: var(--gradiente-album, var(--gradiente-pastel));
+  color: var(--medianoche);
+  padding: 42px 24px;
+}
+
+.album-portadilla-reporte .eyebrow {
+  color: var(--dorado-oscuro);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.album-portadilla-reporte h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 27px;
+  font-style: italic;
+  color: var(--medianoche);
+  margin-bottom: 10px;
+}
+
+.album-portadilla-reporte p {
+  max-width: 430px;
+  margin: 0 auto;
+  color: #5c4f78;
+  font-size: 14px;
+}
+
+.album-reporte-contenido {
+  padding: 26px 22px;
+}
+
+/* El reporte visible en pantalla conserva los desplegables.
+   Dentro del Álbum se abren automáticamente para impresión. */
+.album-reporte-completo details > .subseccion-detalle-cuerpo {
+  display: block;
+}
+
+@media print {
+  .album-reporte-completo {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    overflow: visible;
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .album-portadilla-reporte {
+    min-height: 9.5in;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    page-break-after: always;
+    break-after: page;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .album-reporte-contenido {
+    padding: 0;
+  }
+
+  .album-reporte-completo .seccion-numero,
+  .album-reporte-completo .ficha-energetica {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .album-reporte-completo .numero-cabecera,
+  .album-reporte-completo .numero-frase-poder,
+  .album-reporte-completo .acompanar-box,
+  .album-reporte-completo .ficha-item,
+  .album-reporte-completo .afirmacion-box {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .album-reporte-completo details {
+    display: block;
+  }
+
+  .album-reporte-completo details > summary {
+    display: block;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .album-reporte-completo details > summary::after {
+    display: none;
+  }
+
+  .album-reporte-completo details > .subseccion-detalle-cuerpo {
+    display: block !important;
+  }
+
+  .album-reporte-completo .ficha-energetica,
+  .album-reporte-completo .numero-estrella,
+  .album-reporte-completo .acompanar-box,
+  .album-reporte-completo .ficha-item,
+  .album-reporte-completo .afirmacion-box {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+
+/* ---------- Álbum: reportes en texto continuo ---------- */
+.album-reporte-seccion {
+  padding: 26px 0;
+  border-bottom: 1px solid #E9DFC9;
+}
+
+.album-reporte-seccion:last-child {
+  border-bottom: none;
+}
+
+.album-subseccion-continua {
+  margin: 18px 0;
+}
+
+.album-subseccion-continua h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  color: var(--violeta-oscuro);
+  margin: 0 0 8px;
+}
+
+.album-subseccion-continua p {
+  margin-bottom: 10px;
+}
+
+.album-subseccion-continua ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.album-subseccion-continua li {
+  margin-bottom: 6px;
+}
+
+.album-esencia-continua {
+  background: var(--lino);
+  border-radius: 16px;
+  padding: 22px;
+  margin-top: 24px;
+}
+
+@media print {
+  .album-reporte-seccion {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .album-subseccion-continua,
+  .album-reporte-seccion .numero-cabecera,
+  .album-reporte-seccion .numero-frase-poder,
+  .album-reporte-seccion .acompanar-box {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+
+/* =========================================================
+   AJUSTES FINALES DE IMPRESIÓN DEL ÁLBUM
+   ========================================================= */
+@media print {
+  /* Cada una de las primeras nueve secciones ocupa una hoja completa. */
+  .album-hoja-1,
+  .album-hoja-2,
+  .album-hoja-3,
+  .album-hoja-4,
+  .album-hoja-5,
+  .album-hoja-6,
+  .album-hoja-7,
+  .album-hoja-8,
+  .album-hoja-9 {
+    min-height: calc(100vh - 0.8in);
+    width: 100%;
+    margin: 0;
+    padding-top: 0.40in;
+    padding-right: 0.40in;
+    padding-bottom: 0.45in;
+    padding-left: 0.85in;
+    border: none;
+    border-radius: 0;
+    page-break-after: always;
+    break-after: page;
+    box-shadow: none;
+  }
+
+  /* Hoja 1: portada a página completa. */
+  .album-hoja-1 {
+    min-height: calc(100vh - 0.8in);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--gradiente-album, var(--gradiente-pastel)) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .album-hoja-1 .eyebrow,
+  .album-hoja-1 h1,
+  .album-hoja-1 .subt {
+    width: 100%;
+    text-align: center;
+  }
+
+  .album-hoja-1 h1 {
+    font-size: 34px;
+    margin: 10px 0;
+  }
+
+  .album-hoja-1 .subt {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  /* Hoja 2: mensaje a todo lo ancho y respetando párrafos. */
+  .album-hoja-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    background: var(--acento-album-suave) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .album-hoja-2 p {
+    width: 100%;
+    max-width: none;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+
+  /* Hoja 3: datos y tabla del mapa a todo lo ancho. */
+  .album-hoja-3 .album-datos-grid,
+  .album-hoja-3 .album-numeros-grid {
+    width: 100%;
+  }
+
+  .album-hoja-3 .album-datos-grid {
+    gap: 18px 22px;
+    margin-bottom: 26px;
+  }
+
+  .album-hoja-3 .album-numeros-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .album-hoja-3 .album-mini-numero {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+
+  /* Hoja 4: huellas grandes y alargadas. */
+  .album-hoja-4 .album-huellas-grid {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    min-height: 7.5in;
+  }
+
+  .album-hoja-4 .album-huella-caja {
+    min-height: 7in;
+    aspect-ratio: auto;
+  }
+
+  /* Hoja 5: líneas distribuidas en toda la hoja. */
+  .album-hoja-5 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .album-hoja-5 .album-linea-llenar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 22px;
+  }
+
+  .album-hoja-5 .album-renglon {
+    flex: 1;
+    min-height: 0.32in;
+  }
+
+  /* Hoja 6: cuatro recuadros amplios. */
+  .album-hoja-6 .album-fotos-grid {
+    width: 100%;
+    min-height: 7.7in;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .album-hoja-6 .album-foto-caja {
+    min-height: 3.6in;
+    aspect-ratio: auto;
+  }
+
+  /* Hoja 7: tabla expandida a toda la página. */
+  .album-hoja-7 .album-tabla-bitacora {
+    width: 100%;
+    height: 8.2in;
+    table-layout: fixed;
+  }
+
+  .album-hoja-7 .album-tabla-bitacora th,
+  .album-hoja-7 .album-tabla-bitacora td {
+    padding: 10px 8px;
+  }
+
+  .album-hoja-7 .album-tabla-bitacora tbody tr {
+    height: 0.58in;
+  }
+
+  /* Hoja 8: primeras veces con mayor espacio. */
+  .album-hoja-8 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .album-hoja-8 .album-linea-llenar {
+    flex: 1;
+    margin-bottom: 18px;
+  }
+
+  .album-hoja-8 .album-renglon-corto {
+    width: 100%;
+    height: 0.58in;
+  }
+
+  /* Hoja 9: preferencias distribuidas a toda la hoja. */
+  .album-hoja-9 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .album-hoja-9 .album-linea-llenar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .album-hoja-9 .album-renglon {
+    flex: 1;
+    min-height: 0.38in;
+  }
+
+  /* Esencia Energética comienza siempre en nueva página. */
+  .album-esencia-continua {
+    page-break-before: always;
+    break-before: page;
+    margin-top: 0;
+  }
+}
