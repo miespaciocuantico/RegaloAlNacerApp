@@ -18,10 +18,8 @@
  */
 
 const LLAVE_STORAGE = 'regaloAlNacer_datosBebe';
-const DIAS_ESPERA_ALBUM = 7;
 
 let datosBebe = null;       // resultado de Iniciar (persistido en localStorage)
-let datosCronos = null;     // resultado de Cronos (2 fechas, no se persiste)
 
 // Símbolos zodiacales en modo "texto" (U+FE0E), no emoji a color,
 // para que se vean como símbolo tipográfico y no como emoji de caricatura.
@@ -117,7 +115,10 @@ function cargarFormularioDesdeDatos(datos) {
   asignarValor('iniciar-fecha', datos.fechaNacimiento || '');
 
   const campoYaNacio = document.getElementById('iniciar-ya-nacio');
-  if (campoYaNacio) campoYaNacio.checked = Boolean(datos.yaNacio);
+  if (campoYaNacio) {
+    campoYaNacio.checked = true;
+    campoYaNacio.disabled = true;
+  }
 
   asignarValor('iniciar-genero', datos.genero || '');
   asignarValor('iniciar-hora', datos.hora || '');
@@ -126,10 +127,9 @@ function cargarFormularioDesdeDatos(datos) {
   asignarValor('iniciar-talla', datos.talla || '');
   asignarValor('iniciar-mensaje-papas', datos.mensajePapas || '');
 
-  // Asegura que los campos adicionales queden visibles si ya había nacido.
-  if (campoYaNacio && document.getElementById('campos-ya-nacio')) {
-    alternarCamposNacimiento();
-  }
+  // En el BONUS "Ya nació", los datos de nacimiento siempre están visibles.
+  const camposNacimiento = document.getElementById('campos-ya-nacio');
+  if (camposNacimiento) camposNacimiento.classList.remove('oculto');
 }
 
 // ---------------------------------------------------------------
@@ -183,7 +183,7 @@ function mostrarCelebracion(nombrePila, genero) {
   } catch (error) {
     console.error('Error al mostrar la pantalla de celebración:', error);
     // Si algo falla, no dejamos a la persona atorada: la mandamos igual al reporte.
-    irAPantalla('reporte-fecha');
+    irAPantalla('album');
   }
 }
 
@@ -199,11 +199,6 @@ function ocultarErrorFormulario(idError) {
   if (el) el.classList.add('oculto');
 }
 
-function alternarCamposNacimiento() {
-  const marcado = document.getElementById('iniciar-ya-nacio').checked;
-  const contenedor = document.getElementById('campos-ya-nacio');
-  contenedor.classList.toggle('oculto', !marcado);
-}
 
 // ---------------------------------------------------------------
 // FORMULARIO: INICIAR
@@ -215,7 +210,7 @@ function manejarEnvioIniciar(evento) {
   const nombre = document.getElementById('iniciar-nombre').value.trim();
   const apellidos = document.getElementById('iniciar-apellidos').value.trim();
   const fecha = document.getElementById('iniciar-fecha').value;
-  const yaNacio = document.getElementById('iniciar-ya-nacio').checked;
+  const yaNacio = true;
   const genero = document.getElementById('iniciar-genero').value;
   const hora = document.getElementById('iniciar-hora').value;
   const lugarNacimiento = document.getElementById('iniciar-lugar-nacimiento').value.trim();
@@ -223,9 +218,8 @@ function manejarEnvioIniciar(evento) {
   const talla = document.getElementById('iniciar-talla').value.trim();
   const mensajePapas = document.getElementById('iniciar-mensaje-papas').value.trim();
 
-  // Validación: nombre, apellidos y fecha siempre son obligatorios.
-  // Si ya nació, el género también es obligatorio (define el tema del Álbum).
-  if (!nombre || !apellidos || !fecha || (yaNacio && !genero)) {
+  // BONUS "Ya nació": todos los datos del bebé son obligatorios.
+  if (!nombre || !apellidos || !fecha || !genero || !hora || !lugarNacimiento || !peso || !talla || !mensajePapas) {
     mostrarErrorFormulario('error-iniciar');
     return false;
   }
@@ -238,37 +232,25 @@ function manejarEnvioIniciar(evento) {
     try {
       const calculado = window.NumerologiaCore.calcularReporteBebe(nombre, apellidos, fecha);
 
-      // Si "ya nació" está marcado, siempre celebramos (regla simple y predecible,
-      // sin depender de si había un registro previo en este dispositivo).
-      const fechaMarcadoNacidoPrevia = (datosBebe && datosBebe.fechaMarcadoNacido) || null;
-
       datosBebe = {
         ...calculado,
         // Conservamos también los valores tal como fueron capturados para poder
         // reconstruir el formulario exactamente al volver a abrir la app.
         nombreCapturado: nombre,
         apellidosCapturados: apellidos,
-        yaNacio,
-        genero: yaNacio ? genero : null,
-        hora: yaNacio ? hora : '',
-        lugarNacimiento: yaNacio ? lugarNacimiento : '',
-        peso: yaNacio ? peso : '',
-        talla: yaNacio ? talla : '',
-        mensajePapas: yaNacio ? mensajePapas : '',
-        fechaMarcadoNacido: yaNacio ? (fechaMarcadoNacidoPrevia || new Date().toISOString()) : null,
+        yaNacio: true,
+        genero,
+        hora,
+        lugarNacimiento,
+        peso,
+        talla,
+        mensajePapas,
       };
 
       guardarDatosBebe();
-      renderizarReporteFecha(datosBebe);
-      renderizarReporteNombre(datosBebe);
-      renderizarResumen(datosBebe);
       renderizarAlbum(datosBebe);
 
-      if (yaNacio) {
-        mostrarCelebracion(datosBebe.nombrePila, genero);
-      } else {
-        irAPantalla('reporte-fecha');
-      }
+      mostrarCelebracion(datosBebe.nombrePila, genero);
     } catch (error) {
       console.error('Error al generar el Mapa Energético:', error);
       alert('Ocurrió un error generando el Mapa de tu bebé. Intentalo más tarde, si persiste envianos un correo para solucionarlo');
@@ -276,145 +258,6 @@ function manejarEnvioIniciar(evento) {
   }, 1200);
 
   return false;
-}
-
-// ---------------------------------------------------------------
-// FORMULARIO: CRONOS
-// ---------------------------------------------------------------
-function manejarEnvioCronos(evento) {
-  evento.preventDefault();
-  ocultarErrorFormulario('error-cronos');
-
-  const fechaA = document.getElementById('cronos-fecha-a').value;
-  const fechaB = document.getElementById('cronos-fecha-b').value;
-
-  if (!fechaA || !fechaB) {
-    mostrarErrorFormulario('error-cronos');
-    return false;
-  }
-
-  const resultadoA = window.NumerologiaCore.calcularReporteBebe('', '', fechaA);
-  const resultadoB = window.NumerologiaCore.calcularReporteBebe('', '', fechaB);
-  datosCronos = { resultadoA, resultadoB };
-
-  renderizarCronos(datosCronos);
-  return false;
-}
-
-function renderizarCronos({ resultadoA, resultadoB }) {
-  const contenedor = document.getElementById('resultado-cronos');
-  const filas = [
-    ['Alma', 'alma'], ['Personalidad', 'personalidad'], ['Regalo', 'regalo'],
-    ['Camino de Crecimiento', 'retos'], ['Misión Natal', 'mision'],
-  ];
-
-  const columnaHtml = (resultado, etiqueta) => `
-    <div class="columna-fecha">
-      <h4>Opción ${etiqueta}<br><span class="fecha-grande">${formatearFecha(resultado.fechaNacimiento)}</span></h4>
-      <div class="signo-linea"><span class="signo-emoji">${SIGNO_EMOJI[resultado.signoSolar] || ''}</span>${resultado.signoSolar}</div>
-      ${filas.map(([label, key]) => `
-        <div class="mini-numero"><span>${label}</span><b>${resultado.fecha[key]}</b></div>
-      `).join('')}
-    </div>
-  `;
-
-  contenedor.innerHTML = `
-    <div class="comparacion-columnas">
-      ${columnaHtml(resultadoA, 'A')}
-      ${columnaHtml(resultadoB, 'B')}
-    </div>
-    <div class="veredicto-cronos">
-      ${generarVeredictoCronos(resultadoA, resultadoB)}
-    </div>
-  `;
-}
-
-function obtenerTextoCronos(seccionKey, numero) {
-  const biblioteca = window.BIBLIOTECA_FECHA || {};
-  const libroNumero = biblioteca[numero];
-  const contenido = libroNumero ? libroNumero[seccionKey] : null;
-
-  if (!contenido || !contenido.textoBreveCronos) {
-    return 'Información no disponible para esta energía.';
-  }
-
-  return contenido.textoBreveCronos;
-}
-
-function generarBloqueOpcionCronos(resultado, etiqueta) {
-  const aspectos = [
-    { label: 'Alma', campo: 'alma', seccion: 'alma' },
-    { label: 'Personalidad', campo: 'personalidad', seccion: 'personalidad' },
-    { label: 'Regalo', campo: 'regalo', seccion: 'regalo' },
-    { label: 'Camino de Crecimiento', campo: 'retos', seccion: 'caminoDeCrecimiento' },
-    { label: 'Misión', campo: 'mision', seccion: 'misionNatal' },
-  ];
-
-  return `
-    <div class="cronos-opcion-detalle">
-      <h4>Opción ${etiqueta}</h4>
-      ${aspectos.map(aspecto => {
-        const numero = resultado.fecha[aspecto.campo];
-        const texto = obtenerTextoCronos(aspecto.seccion, numero);
-
-        return `
-          <div class="cronos-aspecto">
-            <p><strong>${aspecto.label} ${numero}</strong></p>
-            <p>${texto}</p>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-}
-
-function generarVariacionesCronos(resultadoA, resultadoB) {
-  const aspectos = [
-    { label: 'Alma', campo: 'alma' },
-    { label: 'Personalidad', campo: 'personalidad' },
-    { label: 'Regalo', campo: 'regalo' },
-    { label: 'Camino de Crecimiento', campo: 'retos' },
-    { label: 'Misión', campo: 'mision' },
-  ];
-
-  const variaciones = aspectos.filter(aspecto =>
-    resultadoA.fecha[aspecto.campo] !== resultadoB.fecha[aspecto.campo]
-  );
-
-  if (!variaciones.length) {
-    return `
-      <div class="cronos-variaciones">
-        <p><strong>No hay variación en el Mapa de Fecha.</strong></p>
-        <p>Ambas fechas comparten la misma configuración energética</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="cronos-variaciones">
-      <p><strong>La variación está en:</strong></p>
-      <ul>
-        ${variaciones.map(aspecto => `
-          <li>
-            <strong>${aspecto.label}:</strong>
-            ${resultadoA.fecha[aspecto.campo]} en la opción A
-            y ${resultadoB.fecha[aspecto.campo]} en la opción B.
-          </li>
-        `).join('')}
-      </ul>
-    </div>
-  `;
-}
-
-function generarVeredictoCronos(resultadoA, resultadoB) {
-  return `
-    <h3 style="color:var(--dorado); font-family:'Fraunces',serif; font-size:17px; margin-bottom:10px;">¿Cuál energía elegir?</h3>
-    <p style="margin-bottom:18px;">Con la que ustedes como papás se sientan más identificados:</p>
-
-    ${generarBloqueOpcionCronos(resultadoA, 'A')}
-    ${generarBloqueOpcionCronos(resultadoB, 'B')}
-    ${generarVariacionesCronos(resultadoA, resultadoB)}
-  `;
 }
 
 // ---------------------------------------------------------------
@@ -702,129 +545,8 @@ function generarInterpretacionIA(seccion, numero, nombrePila, puntos, fraseIntro
 }
 
 // ---------------------------------------------------------------
-// RENDERIZADO: REPORTE DE FECHA
-// ---------------------------------------------------------------
-function renderizarReporteFecha(datos) {
-  const { nombrePila, fecha, signoSolar } = datos;
-
-  const seccionesFecha = ORDEN_SECCIONES_FECHA
-    .map((item, indice) => renderizarSeccionFecha(indice + 1, item.campo, item.seccion, fecha[item.campo], nombrePila))
-    .join('');
-
-  const esenciaEnergeticaHtml = renderizarEsenciaEnergetica(fecha.alma, signoSolar);
-
-  document.getElementById('reporte-fecha-contenido').innerHTML = `
-    <div class="reporte-bienvenida">
-      <div class="eyebrow">Mapa de Fecha de Nacimiento</div>
-      <h2>Lo que revela la fecha de, ${nombrePila}</h1>
-      <p>La fecha de nacimiento revela la energía con la que tu bebé llega a este mundo, es una mirada a los talentos, regalos y propósito que acompañan su llegada a esta vida.</p>
-    </div>
-
-    ${seccionesFecha}
-
-    ${esenciaEnergeticaHtml}
-
-    <button class="boton-secundario" onclick="irAPantalla('reporte-nombre')">Ver el Mapa del Nombre de ${nombrePila}</button>
-  `;
-}
-
-// ---------------------------------------------------------------
-// RENDERIZADO: REPORTE DE NOMBRE
-// ---------------------------------------------------------------
-function renderizarReporteNombre(datos) {
-  const { nombrePila, nombreNumerologia } = datos;
-  const bibliotecaNombre = window.BIBLIOTECA_NOMBRE || {};
-
-  const seccionesNombre = CONTENIDO_NUMEROS_NOMBRE.map(item => {
-    const numero = nombreNumerologia[item.key];
-    const contenidoNumero = bibliotecaNombre[numero] || {};
-    const texto = contenidoNumero[item.bibliotecaKey];
-
-    return `
-      <div class="seccion-numero">
-        <div class="numero-cabecera">
-          <div class="numero-estrella">${numero}</div>
-          <div>
-            <h3 class="numero-titulo">${item.numero}. ${item.titulo}</h3>
-            <p class="numero-vibracion">Vibración número ${numero}</p>
-          </div>
-        </div>
-        <p class="numero-que-representa"><strong>¿Qué representa?</strong> ${item.queRepresenta}</p>
-        <div class="interpretacion-texto">
-          ${texto ? parrafosHtml(texto) : '<p><em>Información no disponible en este momento.</em></p>'}
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  document.getElementById('reporte-nombre-contenido').innerHTML = `
-    <div class="reporte-bienvenida">
-      <div class="eyebrow">Mapa del Nombre</div>
-      <h2>Lo que revela el nombre de ${nombrePila}</h2>
-      <p>El nombre representa la energía que elegimos para acompañar el alma del bebé. Es una vibración que influye en la manera en que su esencia se expresa y se desarrolla a lo largo de la vida.</p>
-    </div>
-
-
-    ${seccionesNombre}
-
-
-<button class="boton-secundario" onclick="irAPantalla('reporte-fecha')">Ver el Mapa de Fecha de ${nombrePila}</button>  `;
-}
-
-// ---------------------------------------------------------------
-// RENDERIZADO: RESUMEN
-// ---------------------------------------------------------------
-function renderizarResumen(datos) {
-  const { nombrePila } = datos;
-
-  document.getElementById('resumen-contenido').innerHTML = `
-    <div class="resumen-titulo">
-      <div class="eyebrow">Resumen</div>
-      <h2>El Mapa Energético de ${nombrePila}</h2>
-    </div>
-
-    <div class="resumen-item">
-      <div class="icono" data-icono="estrella"></div>
-      <div class="texto"><strong>Su mayor fortaleza</strong><span>[generado por IA]</span></div>
-    </div>
-    <div class="resumen-item">
-      <div class="icono icono-rosa" data-icono="corazon"></div>
-      <div class="texto"><strong>Lo que más necesitará</strong><span>[generado por IA]</span></div>
-    </div>
-    <div class="resumen-item">
-      <div class="icono" data-icono="brote"></div>
-      <div class="texto"><strong>Su aprendizaje más importante</strong><span>[generado por IA]</span></div>
-    </div>
-    <div class="resumen-item">
-      <div class="icono" data-icono="estrella"></div>
-      <div class="texto"><strong>El talento que vino a compartir</strong><span>[generado por IA]</span></div>
-    </div>
-    <div class="resumen-item">
-      <div class="icono icono-rosa" data-icono="manoCorazon"></div>
-      <div class="texto"><strong>Cómo pueden acompañarle mejor sus padres</strong><span>[generado por IA]</span></div>
-    </div>
-
-    <div class="carta-final">
-      <p>Querid@ ${nombrePila}:</p>
-      <p>Hoy aún eres muy pequeño para leer estas palabras... pero algún día quizá vuelvas a este documento y descubras que muchas de estas semillas ya vivían dentro de ti desde el día en que naciste.</p>
-      <p>Nunca olvides que los números no escriben tu destino. Solo iluminan el potencial que siempre ha habitado en ti.</p>
-      <p>Que tu camino esté lleno de amor, curiosidad y propósito.</p>
-      <p class="firma">Con cariño.<br><small>Este estudio fue preparado para acompañarte desde tus primeros pasos.</small></p>
-    </div>
-  `;
-
-  aplicarIconos(document.getElementById('resumen-contenido'));
-}
-
-// ---------------------------------------------------------------
 // RENDERIZADO: ÁLBUM DEL BEBÉ
 // ---------------------------------------------------------------
-function diasTranscurridosDesde(fechaISOConHora) {
-  const entonces = new Date(fechaISOConHora);
-  const ahora = new Date();
-  const msPorDia = 1000 * 60 * 60 * 24;
-  return Math.floor((ahora - entonces) / msPorDia);
-}
 
 // Agrega la unidad (cm/kg) solo si el valor capturado es un número puro,
 // para no duplicarla si la persona ya escribió "3.2 kg" o "50 cm".
@@ -837,37 +559,23 @@ function formatearConUnidad(valor, unidad) {
 function renderizarAlbum(datos) {
   const contenedor = document.getElementById('album-contenido');
 
-  if (!datos || !datos.yaNacio) {
+  const datosCompletos = datos && datos.genero && datos.hora && datos.lugarNacimiento &&
+    datos.peso && datos.talla && datos.mensajePapas;
+
+  if (!datosCompletos) {
     contenedor.innerHTML = `
       <div class="encabezado-seccion">
         <div class="eyebrow">Álbum del Bebé</div>
         <h2>Un recuerdo para toda la vida</h2>
       </div>
       <div class="estado-vacio">
-        <p>El Álbum de tu bebé estará listo cuando nos indiques que ya nació.</p>
-        <button class="boton-primario" onclick="irAPantalla('iniciar')">Marcar que ya nació</button>
+        <p>Completa todos los datos de nacimiento para generar el Álbum de tu bebé.</p>
+        <button class="boton-primario" onclick="irAPantalla('home')">Completar datos</button>
       </div>
     `;
     return;
   }
 
-  const diasTranscurridos = diasTranscurridosDesde(datos.fechaMarcadoNacido);
-  const diasFaltantes = DIAS_ESPERA_ALBUM - diasTranscurridos;
-
-  if (diasFaltantes > 0) {
-    contenedor.innerHTML = `
-      <div class="encabezado-seccion">
-        <div class="eyebrow">Álbum del Bebé</div>
-        <h2>Un recuerdo para toda la vida</h2>
-      </div>
-      <div class="estado-vacio">
-        <p>Estamos generando el Álbum de tu bebé, lo podrás descargar dentro de ${diasFaltantes} día${diasFaltantes === 1 ? '' : 's'}.</p>
-      </div>
-    `;
-    return;
-  }
-
-  // Álbum desbloqueado
   const tema = datos.genero === 'masculino' ? 'tema-nino' : 'tema-nina';
   contenedor.innerHTML = `
     <div class="album-desbloqueado ${tema}">
@@ -1212,30 +920,18 @@ function formatearFecha(fechaISO) {
 }
 
 // ---------------------------------------------------------------
-// ESTADOS VACÍOS: si entran sin haber hecho Iniciar
+// ESTADO VACÍO DEL ÁLBUM
 // ---------------------------------------------------------------
 function verificarEstadosVacios() {
   if (!datosBebe) {
-    document.getElementById('reporte-fecha-contenido').innerHTML = `
-      <div class="estado-vacio">
-        <p>Aún no has generado un Mapa Energético.</p>
-        <button class="boton-primario" onclick="irAPantalla('iniciar')">Ir a Iniciar</button>
-      </div>`;
-    document.getElementById('reporte-nombre-contenido').innerHTML = `
-      <div class="estado-vacio">
-        <p>Aún no has generado un Mapa Energético.</p>
-        <button class="boton-primario" onclick="irAPantalla('iniciar')">Ir a Iniciar</button>
-      </div>`;
-    document.getElementById('resumen-contenido').innerHTML = `
-      <div class="estado-vacio">
-        <p>Aún no hay un resumen que mostrar.</p>
-        <button class="boton-primario" onclick="irAPantalla('iniciar')">Ir a Iniciar</button>
-      </div>`;
-    document.getElementById('album-contenido').innerHTML = `
-      <div class="estado-vacio">
-        <p>El Álbum de tu bebé estará listo cuando nos indiques que ya nació.</p>
-        <button class="boton-primario" onclick="irAPantalla('iniciar')">Ir a Iniciar</button>
-      </div>`;
+    const album = document.getElementById('album-contenido');
+    if (album) {
+      album.innerHTML = `
+        <div class="estado-vacio">
+          <p>Completa los datos reales de nacimiento de tu bebé para generar su Álbum Personalizado.</p>
+          <button class="boton-primario" onclick="irAPantalla('home')">Completar datos</button>
+        </div>`;
+    }
   }
 }
 
@@ -1245,12 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
   datosBebe = cargarDatosBebe();
 
   if (datosBebe) {
-    // Recupera los últimos datos capturados y deja disponibles de inmediato
-    // tanto el formulario como todos los reportes ya generados.
     cargarFormularioDesdeDatos(datosBebe);
-    renderizarReporteFecha(datosBebe);
-    renderizarReporteNombre(datosBebe);
-    renderizarResumen(datosBebe);
     renderizarAlbum(datosBebe);
   } else {
     verificarEstadosVacios();

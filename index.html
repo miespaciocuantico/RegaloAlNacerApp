@@ -35,91 +35,44 @@
 </section>
 
 <!-- ============================================================
-     PANTALLA — HOME (menú explicado, con acceso a todos los módulos)
+     PANTALLA — HOME / CAPTURA DE DATOS
      ============================================================ -->
 <section id="pantalla-home" class="pantalla oculto">
   <div class="hero-home hero-home-compacto">
-    <div class="eyebrow">Un Regalo al Nacer</div>
-    <h1>El Mapa Energético de tu bebé</h1>
+    <div class="eyebrow">BONUS · Ya nació</div>
+    <h1>Genera el Álbum de tu bebé</h1>
   </div>
 
-  <div class="menu-home">
-    <div class="menu-item" onclick="irAPantalla('iniciar')">
-      <div class="menu-item-icono" data-icono="destello"></div>
-      <div class="menu-item-texto">
-        <h3>Iniciar</h3>
-        <p>Ingresa los datos de tu bebé.</p>
-      </div>
-    </div>
-
-    <div class="menu-item" onclick="irAPantalla('reporte-fecha')">
-      <div class="menu-item-icono" data-icono="fecha"></div>
-      <div class="menu-item-texto">
-        <h3>Mapa de Fecha</h3>
-        <p>Te brinda el análisis de la fecha de nacimiento y la energía que esa fecha impregna en tu bebé.</p>
-      </div>
-    </div>
-
-    <div class="menu-item" onclick="irAPantalla('cronos')">
-      <div class="menu-item-icono" data-icono="cronos"></div>
-      <div class="menu-item-texto">
-        <h3>Cronos</h3>
-        <p>Podrás comparar entre 2 fechas posibles de nacimiento.</p>
-      </div>
-    </div>
-
-    <div class="menu-item" onclick="irAPantalla('reporte-nombre')">
-      <div class="menu-item-icono" data-icono="nombre"></div>
-      <div class="menu-item-texto">
-        <h3>Mapa de Nombre</h3>
-        <p>Cada nombre combinado con los apellidos tiene una energía que se irá reflejando en la personalidad de tu bebé. Explora la combinación de nombres que más les guste.</p>
-      </div>
-    </div>
-
-    <div class="menu-item" onclick="irAPantalla('album')">
-      <div class="menu-item-icono" data-icono="album"></div>
-      <div class="menu-item-texto">
-        <h3>Álbum del Bebé</h3>
-        <p>Avísanos cuando tu bebé haya nacido, generaremos su Álbum Personalizado que podrás descargar e imprimir.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     PANTALLA — INICIAR (formulario)
-     ============================================================ -->
-<section id="pantalla-iniciar" class="pantalla oculto">
   <div class="encabezado-seccion">
-    <h2>Cuéntanos sobre tu bebé</h2>
-    <p>Con su nombre y fecha de nacimiento generamos su Mapa Energético completo.</p>
+    <h2>¡Tu bebé ya está aquí!</h2>
+    <p>Completa sus datos reales de nacimiento para generar su Mapa Energético definitivo y crear su Álbum Personalizado.</p>
   </div>
 
   <form id="form-iniciar" novalidate onsubmit="return manejarEnvioIniciar(event)">
     <div class="campo">
       <label for="iniciar-nombre">Nombre</label>
-      <input type="text" id="iniciar-nombre" placeholder="Ej. María José">
+      <input type="text" id="iniciar-nombre" required placeholder="Ej. María José">
     </div>
     <div class="campo">
       <label for="iniciar-apellidos">Apellidos</label>
-      <input type="text" id="iniciar-apellidos" placeholder="Ej. Hernández Torres">
+      <input type="text" id="iniciar-apellidos" required placeholder="Ej. Hernández Torres">
     </div>
     <div class="campo">
       <label for="iniciar-fecha">Fecha de nacimiento</label>
-      <input type="date" id="iniciar-fecha">
+      <input type="date" id="iniciar-fecha" required>
     </div>
 
     <div class="campo campo-checkbox">
       <label>
-        <input type="checkbox" id="iniciar-ya-nacio" onchange="alternarCamposNacimiento()">
+        <input type="checkbox" id="iniciar-ya-nacio" checked disabled aria-checked="true">
         Ya nació mi bebé
       </label>
     </div>
 
-    <div id="campos-ya-nacio" class="campos-condicionales oculto">
+    <div id="campos-ya-nacio" class="campos-condicionales">
       <div class="campo">
         <label for="iniciar-genero">Género</label>
-        <select id="iniciar-genero">
+        <select id="iniciar-genero" required>
           <option value="">Selecciona una opción</option>
           <option value="femenino">Femenino</option>
           <option value="masculino">Masculino</option>
@@ -128,32 +81,32 @@
       <div class="campo-fila">
         <div class="campo">
           <label for="iniciar-hora">Hora de nacimiento</label>
-          <input type="time" id="iniciar-hora">
+          <input type="time" id="iniciar-hora" required>
         </div>
       </div>
       <div class="campo">
         <label for="iniciar-lugar-nacimiento">Lugar de nacimiento</label>
-        <input type="text" id="iniciar-lugar-nacimiento" placeholder="Ej. Cd. de México">
+        <input type="text" id="iniciar-lugar-nacimiento" required placeholder="Ej. Cd. de México">
       </div>
       <div class="campo-fila">
         <div class="campo">
           <label for="iniciar-peso">Peso al nacer</label>
-          <input type="text" id="iniciar-peso" placeholder="Ej. 3.2 kg">
+          <input type="text" id="iniciar-peso" required placeholder="Ej. 3.2 kg">
         </div>
         <div class="campo">
           <label for="iniciar-talla">Tamaño al nacer</label>
-          <input type="text" id="iniciar-talla" placeholder="Ej. 50 cm">
+          <input type="text" id="iniciar-talla" required placeholder="Ej. 50 cm">
         </div>
       </div>
       <div class="campo">
         <label for="iniciar-mensaje-papas">Mensaje de los papás</label>
-        <textarea id="iniciar-mensaje-papas" rows="4" placeholder="Escribe un mensaje para tu bebé... Este mensaje estará integrado en el Albúm"></textarea>
+        <textarea id="iniciar-mensaje-papas" required rows="4" placeholder="Escribe un mensaje para tu bebé... Este mensaje estará integrado en el Álbum"></textarea>
       </div>
     </div>
 
-    <div id="error-iniciar" class="mensaje-error oculto">Por favor completa la información para realizar el mapa completo.</div>
+    <div id="error-iniciar" class="mensaje-error oculto">Por favor completa todos los datos para generar el Álbum de tu bebé.</div>
 
-    <button type="submit" class="boton-primario">Generar su Mapa Energético</button>
+    <button type="submit" class="boton-primario">Crear el Álbum de mi bebé</button>
   </form>
 </section>
 
@@ -180,59 +133,7 @@
   <p id="celebracion-texto" class="celebracion-texto">Tu bebé ya está aquí.</p>
   <p id="celebracion-frase" class="celebracion-frase">Tu llegada es el comienzo de un nuevo viaje lleno de esperanzas, sueños y posibilidades.</p>
   <img id="celebracion-gif" class="celebracion-gif oculto" alt="Celebración de bienvenida">
-  <button class="boton-primario celebracion-boton" onclick="irAPantalla('reporte-fecha')">Ver su Mapa Energético</button>
-</section>
-
-<!-- ============================================================
-     PANTALLA — CRONOS
-     ============================================================ -->
-<section id="pantalla-cronos" class="pantalla oculto">
-  <div class="encabezado-seccion">
-    <div class="eyebrow">Cronos</div>
-    <h2>¿Cuál fecha elegir?</h2>
-    <p class="nota-suave">La mejor fecha siempre es la que elija naturalmente tu bebé para nacer.</p>
-    <p>Cronos te ayuda cuando hay más de una fecha posible de nacimiento, como es el caso de una cesárea programada.</p>
-  </div>
-
-  <div class="nota-cronos">Ingresa las dos fechas que quieres comparar. Verás lado a lado la energía que representa cada una.</div>
-
-  <form id="form-cronos" novalidate onsubmit="return manejarEnvioCronos(event)">
-    <div class="campo-fila">
-      <div class="campo">
-        <label for="cronos-fecha-a">Fecha opción A</label>
-        <input type="date" id="cronos-fecha-a">
-      </div>
-      <div class="campo">
-        <label for="cronos-fecha-b">Fecha opción B</label>
-        <input type="date" id="cronos-fecha-b">
-      </div>
-    </div>
-    <div id="error-cronos" class="mensaje-error oculto">Por favor completa la información para realizar el análisis completo.</div>
-    <button type="submit" class="boton-primario">Comparar energías</button>
-  </form>
-
-  <div id="resultado-cronos" class="resultado-cronos-espaciado"></div>
-</section>
-
-<!-- ============================================================
-     PANTALLA — REPORTE DE FECHA
-     ============================================================ -->
-<section id="pantalla-reporte-fecha" class="pantalla oculto">
-  <div id="reporte-fecha-contenido"></div>
-</section>
-
-<!-- ============================================================
-     PANTALLA — REPORTE DE NOMBRE
-     ============================================================ -->
-<section id="pantalla-reporte-nombre" class="pantalla oculto">
-  <div id="reporte-nombre-contenido"></div>
-</section>
-
-<!-- ============================================================
-     PANTALLA — RESUMEN
-     ============================================================ -->
-<section id="pantalla-resumen" class="pantalla oculto">
-  <div id="resumen-contenido"></div>
+  <button class="boton-primario celebracion-boton" onclick="irAPantalla('album')">Ver el Álbum de mi bebé</button>
 </section>
 
 <!-- ============================================================
@@ -243,20 +144,11 @@
 </section>
 
 <!-- ============================================================
-     NAV INFERIOR FIJO (6 iconos, sin texto)
+     NAV INFERIOR FIJO — HOME + ÁLBUM
      ============================================================ -->
 <nav class="nav-inferior">
   <button class="nav-boton" data-nav="home" onclick="irAPantalla('home')" aria-label="Home">
     <span class="nav-icono" data-icono="home"></span>
-  </button>
-  <button class="nav-boton" data-nav="reporte-fecha" onclick="irAPantalla('reporte-fecha')" aria-label="Reporte de Fecha">
-    <span class="nav-icono" data-icono="fecha"></span>
-  </button>
-  <button class="nav-boton" data-nav="cronos" onclick="irAPantalla('cronos')" aria-label="Cronos">
-    <span class="nav-icono" data-icono="cronos"></span>
-  </button>
-  <button class="nav-boton" data-nav="reporte-nombre" onclick="irAPantalla('reporte-nombre')" aria-label="Reporte de Nombre">
-    <span class="nav-icono" data-icono="nombre"></span>
   </button>
   <button class="nav-boton" data-nav="album" onclick="irAPantalla('album')" aria-label="Álbum del Bebé">
     <span class="nav-icono" data-icono="album"></span>
