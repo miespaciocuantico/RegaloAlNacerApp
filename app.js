@@ -88,6 +88,50 @@ function cargarDatosBebe() {
   }
 }
 
+// Restaura en el formulario de Iniciar los últimos datos guardados.
+// Incluye compatibilidad con registros creados antes de guardar nombre y
+// apellidos como campos independientes.
+function cargarFormularioDesdeDatos(datos) {
+  if (!datos) return;
+
+  const asignarValor = (id, valor = '') => {
+    const campo = document.getElementById(id);
+    if (campo) campo.value = valor ?? '';
+  };
+
+  const nombreGuardado = datos.nombreCapturado || datos.nombrePila || '';
+  let apellidosGuardados = datos.apellidosCapturados || '';
+
+  // Compatibilidad con datos antiguos: si no existía apellidosCapturados,
+  // intentamos obtener los apellidos a partir del nombre completo.
+  if (!apellidosGuardados && datos.nombreCompleto && nombreGuardado) {
+    const nombreCompleto = String(datos.nombreCompleto).trim();
+    const nombreInicial = String(nombreGuardado).trim();
+    if (nombreCompleto.toLowerCase().startsWith(nombreInicial.toLowerCase())) {
+      apellidosGuardados = nombreCompleto.slice(nombreInicial.length).trim();
+    }
+  }
+
+  asignarValor('iniciar-nombre', nombreGuardado);
+  asignarValor('iniciar-apellidos', apellidosGuardados);
+  asignarValor('iniciar-fecha', datos.fechaNacimiento || '');
+
+  const campoYaNacio = document.getElementById('iniciar-ya-nacio');
+  if (campoYaNacio) campoYaNacio.checked = Boolean(datos.yaNacio);
+
+  asignarValor('iniciar-genero', datos.genero || '');
+  asignarValor('iniciar-hora', datos.hora || '');
+  asignarValor('iniciar-lugar-nacimiento', datos.lugarNacimiento || '');
+  asignarValor('iniciar-peso', datos.peso || '');
+  asignarValor('iniciar-talla', datos.talla || '');
+  asignarValor('iniciar-mensaje-papas', datos.mensajePapas || '');
+
+  // Asegura que los campos adicionales queden visibles si ya había nacido.
+  if (campoYaNacio && document.getElementById('campos-ya-nacio')) {
+    alternarCamposNacimiento();
+  }
+}
+
 // ---------------------------------------------------------------
 // NAVEGACIÓN
 // ---------------------------------------------------------------
@@ -200,6 +244,10 @@ function manejarEnvioIniciar(evento) {
 
       datosBebe = {
         ...calculado,
+        // Conservamos también los valores tal como fueron capturados para poder
+        // reconstruir el formulario exactamente al volver a abrir la app.
+        nombreCapturado: nombre,
+        apellidosCapturados: apellidos,
         yaNacio,
         genero: yaNacio ? genero : null,
         hora: yaNacio ? hora : '',
@@ -1197,6 +1245,9 @@ document.addEventListener('DOMContentLoaded', () => {
   datosBebe = cargarDatosBebe();
 
   if (datosBebe) {
+    // Recupera los últimos datos capturados y deja disponibles de inmediato
+    // tanto el formulario como todos los reportes ya generados.
+    cargarFormularioDesdeDatos(datosBebe);
     renderizarReporteFecha(datosBebe);
     renderizarReporteNombre(datosBebe);
     renderizarResumen(datosBebe);
